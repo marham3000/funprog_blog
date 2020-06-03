@@ -251,6 +251,21 @@ test2 <- d2 %>%
                                function(.fun) .fun(.x$residential)))) %>% 
   unnest(mean_sd)
 test2
+
+## ~ MH Comment: I think I came up with a solution with the following code. There a warning that pops up that I wasn't able to figure out (i.e., "argument is not numeric") but maybe you can! I hope this helps. ~ ##
+
+mean_fun <- function(df)  #create summary function for all cols to be applied in lines 261-264
+  summarise_each(df, funs(mean(., na.rm = TRUE)))
+
+m_d2 <- d2 %>%
+  as.tibble() %>% 
+  mutate(means = map(data, mean_fun)) %>% # applied mean_fun (line 257) to cells of all list
+  unnest(cols = means)
+
+m_d2
+d
+
+
 ```
 
 ## General Descriptives with Anonymous Function
